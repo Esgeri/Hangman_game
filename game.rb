@@ -6,7 +6,7 @@
 # За основу взяты методы из первой версии этой игры (подробные комментарии смотрите в прошлых
 # уроках).
 
-require 'unicode_utils'
+require "unicode_utils/upcase"
 
 class Game
   # конструктор - вызывается всегда при создании объекта данного класса
@@ -31,7 +31,7 @@ class Game
     if (slovo == nil || slovo == "")
       abort "Задано пустое слово, не о чем играть. Закрываемся."
     else
-      slovo = slovo.encode("UTF-8")
+      slovo = UnicodeUtils.upcase(slovo).encode("UTF-8")
     end
 
     return slovo.split("")
@@ -88,7 +88,7 @@ class Game
     puts "\nВведите следующую букву"
     letter = ""
     while letter == "" do
-      letter = UnicodeUtils.downcase(STDIN.gets.encode("UTF-8").chomp)
+      letter = UnicodeUtils.upcase(STDIN.gets).encode("UTF-8").chomp
     end
     # после получения ввода, передаем управление в основной метод игры
     next_step(letter)
