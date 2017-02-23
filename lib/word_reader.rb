@@ -1,27 +1,20 @@
 # Класса, отвечающий за ввод данных в программу "виселица"
 
 class WordReader
-
-  # Сохраним старую возможность читать слово из аргументов командной строки.
-  # В качестве отедльного метода для обратной совместимости.
   def read_from_args
-    return ARGV[0]
+    ARGV[0]
   end
 
-  # Метод, возвращающий случайное слово, прочитанное из файла,
-  # имя файла передается как аргумент метода
   def read_from_file(file_name)
-    # проверка, если файла не существует, сразу возвращаем nil
-    if !File.exist?(file_name)
-      return nil
+    begin
+      file = File.new(file_name, "r:UTF-8")
+      lines = file.readlines
+    rescue SystemCallError => e
+      e.message
+      abort "Не удалось открыть файл #{file_name}"
     end
+    file.close
 
-    f = File.new(file_name, "r:UTF-8") # открываем файл, явно указывая его кодировку
-    lines = f.readlines   # читаем все строки в массив
-    f.close # закрываем файл
-
-    return lines.sample.chomp
-    # возвращаем случайную строчку из прочитанного массива,
-    # не забывая удалить в конце символ перевода строки методом chomp
+    lines.sample.chomp
   end
 end
