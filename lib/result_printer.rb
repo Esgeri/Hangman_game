@@ -1,12 +1,8 @@
-# encoding: utf-8
-
 # Класс, печатающий состояние и результаты игры
-#
-# Логика взята из методов первой версии игры "виселица" (см. исходники прошлых уроков)
 
 class ResultPrinter
 
-  def initialize
+  def initialize(game)
     # создадим поле класса, массив, хранящий изображения виселиц
     @status_image = []
 
@@ -15,7 +11,7 @@ class ResultPrinter
 
     while counter <=7 do # в цикле прочитаем 7 файлов и запишем из содержимое в массив
       # изображения виселиц лежат в папке /image/ в файлах 0.txt, 1.txt, 2.txt и т. д.
-      file_name = current_path + "/image/#{counter}.txt"
+      file_name = current_path + "/../image/#{counter}.txt"
 
       begin
         f = File.new(file_name, "r:UTF-8") # вторым параметром явно указываем на кодировку файла
@@ -30,13 +26,11 @@ class ResultPrinter
     end
   end
 
-
-  # Метод, рисующий виселицу. Ему достаточно знать сколько сделано ошибок, поэтому параметр метода,
+  # Метод, рисующий виселицу. Ему достаточно знать сколько сделано ошибок
   # не весь объект типа Game, а всего лишь число ошибок
   def print_viselitsa(errors)
     puts @status_image[errors] # все картинки мы загрузили в массив @status_image в конструкторе
   end
-
 
   # основной метод, печатающий состояния объекта класса Game,
   # который нужно передать в качестве параметра
@@ -50,19 +44,19 @@ class ResultPrinter
 
     print_viselitsa(game.errors)
 
-    if game.status == -1
+    if game.lost?
       puts "\nВы проиграли :(\n"
-      puts "Загаданное слово было: " + game.letters.join("")
+      puts "Загаданное слово было: #{game.letters.join('')}"
       puts
-    elsif game.status == 1
+    elsif game.won?
       puts "Поздравляем, вы выиграли!\n\n"
     else
-      puts "У вас осталось ошибок: " + (7 - game.errors).to_s
+      puts "У вас осталось ошибок: #{game.errors_left}"
     end
   end
 
   # Служебный метод класса, возвращающий строку, изображающую загаданное слово
-  # с открытыми угаданными буквами (см. подробности в исходниках первой версии игры)
+  # с открытыми угаданными буквами
   def get_word_for_print(letters, good_letters)
     result = ""
 
