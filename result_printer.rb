@@ -17,12 +17,13 @@ class ResultPrinter
       # изображения виселиц лежат в папке /image/ в файлах 0.txt, 1.txt, 2.txt и т. д.
       file_name = current_path + "/image/#{counter}.txt"
 
-      if File.exist?(file_name)
+      begin
         f = File.new(file_name, "r:UTF-8") # вторым параметром явно указываем на кодировку файла
         @status_image << f.read # добавляем все содержимое файла в массив
         f.close
-      else
-        @status_image << "\n [ изображение не найдено ] \n" # если файла нет, будет "заглушка"
+      rescue SystemCallError => e
+        puts "Не удалось открыть файл #{file_name}"
+        puts e.message
       end
 
       counter += 1
