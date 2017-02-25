@@ -6,15 +6,7 @@ class WordReader
   end
 
   def read_from_file(file_name)
-    begin
-      file = File.new(file_name, "r:UTF-8")
-      lines = file.readlines
-    rescue SystemCallError => e
-      e.message
-      abort "Не удалось открыть файл #{file_name}"
-    end
-    file.close
-
-    lines.sample.chomp
+    return unless File.exist?(file_name)
+    File.readlines(file_name).sample.chomp
   end
 end
